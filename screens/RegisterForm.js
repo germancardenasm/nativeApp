@@ -4,8 +4,10 @@ import {
   StyleSheet,
   Text,
   Picker,
-  TouchableOpacity,
   TouchableHighlight,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TextInput,
   View
 } from "react-native";
 
@@ -24,58 +26,77 @@ export default class RegisterForm extends Component {
     this.setState({ idType: itemValue });
   };
   onChangeIdNumber = num => {
-    this.setState({ idNumber: num }, () => console.log("State: ", this.state));
+    console.log("onChangeIdNumber: ", num);
+    console.log("state:", this.state);
+    this.setState({ idNumber: num }, () =>
+      console.log("state after update: ", this.state)
+    );
   };
   onChangeCellphone = text => {
     this.setState({ cellphone: text });
   };
+  onCloseKeyboard = () => Keyboard.dismiss();
 
   render() {
     return (
-      <View style={styles.formContainer}>
-        <ScrollView>
-          <Text style={styles.titleText}>¡Esto sera rapido!</Text>
-          <View style={styles.inline}>
-            <View style={styles.pickerContainer}>
-              <Picker
-                onValueChange={this.onChangeIdType}
-                selectedValue={this.state.idType}
-                style={styles.picker}
-                itemStyle={{
-                  color: "blue"
-                }}
-              >
-                <Picker.Item label="CC" value="CC" />
-                <Picker.Item label="CE" value="CE" />
-              </Picker>
+      <TouchableWithoutFeedback onPress={this.onCloseKeyboard}>
+        <View style={styles.formContainer}>
+          <ScrollView>
+            <Text style={styles.titleText}>¡Esto sera rapido!</Text>
+            <View style={styles.inline}>
+              <View style={styles.pickerContainer}>
+                <Picker
+                  onValueChange={this.onChangeIdType}
+                  selectedValue={this.state.idType}
+                  style={styles.picker}
+                  itemStyle={{
+                    color: "blue"
+                  }}
+                >
+                  <Picker.Item label="CC" value="CC" />
+                  <Picker.Item label="CE" value="CE" />
+                </Picker>
+              </View>
+
+              <InputField
+                keyboardType="number-pad"
+                onChange={this.onChangeIdNumber}
+                text={this.state.idNumber}
+                style={styles.inputText}
+                fieldFeedback={""}
+                placeholder={"Numero de Documento*"}
+              />
             </View>
 
             <InputField
-              onChange={this.onChangeIdNumber}
-              value={this.state.idNumber}
+              keyboardType="number-pad"
+              onChange={this.onChangeCellphone}
+              maxLength={10}
               style={styles.inputText}
+              text={this.state.cellphone}
               fieldFeedback={""}
-              placeholder={"Numero de Documento*"}
+              placeholder={"Celular*"}
             />
-          </View>
-          <InputField
-            style={styles.inputText}
-            value={this.state.name}
-            fieldFeedback={""}
-            placeholder={"Celular*"}
-            onChange={this.onChangeCellphone}
-          />
-          <TouchableHighlight
-            style={styles.touchableButton}
-            activeOpacity={0.7}
-            onPress={() => console.log("pressed")}
-          >
-            <View style={styles.button}>
-              <Text>REGISTRAR</Text>
+
+            <TouchableHighlight
+              style={styles.touchableButton}
+              activeOpacity={0.7}
+              onPress={() => console.log("pressed")}
+            >
+              <View style={styles.button}>
+                <Text>REGISTRAR</Text>
+              </View>
+            </TouchableHighlight>
+
+            <View style={{ ...styles.inline, ...styles.textParagraph }}>
+              <Text>
+                Al ingresar tus datos autorizas su tratamiento acrode con
+                nuestra politica de manejo de informacion personal HABEAS DATA.
+              </Text>
             </View>
-          </TouchableHighlight>
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -107,20 +128,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 10,
-    width: 90,
+    width: 100,
     height: 50,
-    marginRight: 5
+    marginRight: 5,
+    paddingLeft: 15
   },
   picker: {
     width: 90,
     fontSize: 30,
     textAlign: "center"
   },
-  label: {
-    fontSize: 12,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
-    textAlign: "left"
+  inputText: {
+    height: 50
   },
   button: {
     alignItems: "center",
@@ -130,5 +149,8 @@ const styles = StyleSheet.create({
   },
   touchableButton: {
     borderRadius: 10
+  },
+  textParagraph: {
+    marginTop: 50
   }
 });

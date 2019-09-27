@@ -5,9 +5,9 @@ export default InputField = props => {
   return (
     <View style={styles.inputFieldContainer}>
       <TextInput
-        style={styles.inputText}
+        style={{ ...props.style, ...styles.inputText }}
         onChangeText={text => props.onChange(text)}
-        value={props.value}
+        value={props.text}
         placeholder={props.placeholder}
       />
       <Text style={styles.label}>{props.fieldFeedback}</Text>
